@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding - 作品集入口網站</title>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --card-bg: rgba(22, 27, 34, 0.75);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --neon-cyan: #00f3ff;
+            --neon-purple: #9d4edd;
+            --neon-pink: #ff007f;
+            --locked-bg: rgba(30, 35, 45, 0.4);
+            --locked-text: #525866;
+            --text-main: #f0f6fc;
+            --text-sub: #8b949e;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 40px 20px;
+        }
+
+        /* Animated ambient background lights */
+        .bg-glow-1 {
+            position: fixed;
+            top: 10%;
+            left: 15%;
+            width: 350px;
+            height: 350px;
+            background: radial-gradient(circle, rgba(0, 243, 255, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(50px);
+            animation: pulseGlow 8s infinite alternate ease-in-out;
+        }
+
+        .bg-glow-2 {
+            position: fixed;
+            bottom: 10%;
+            right: 15%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+            filter: blur(60px);
+            animation: pulseGlow 10s infinite alternate-reverse ease-in-out;
+        }
+
+        /* Subtle grid overlay */
+        .bg-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes pulseGlow {
+            0% { transform: scale(1) translate(0, 0); opacity: 0.6; }
+            100% { transform: scale(1.2) translate(30px, -20px); opacity: 0.9; }
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+
+        /* Profile Header Section */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(135deg, var(--neon-cyan), var(--neon-purple));
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+
+        .avatar-wrapper:hover {
+            transform: scale(1.08) rotate(3deg);
+            box-shadow: 0 0 35px rgba(0, 243, 255, 0.7), 0 0 50px rgba(157, 78, 221, 0.5);
+        }
+
+        .avatar-img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #111;
+            border: 3px solid var(--bg-dark);
+            display: block;
+        }
+
+        .badge-tag {
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.2), rgba(157, 78, 221, 0.2));
+            border: 1px solid rgba(0, 243, 255, 0.4);
+            color: var(--neon-cyan);
+            font-size: 0.85rem;
+            font-weight: 600;
+            padding: 4px 14px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+        }
+
+        .profile-name {
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffffff 30%, var(--neon-cyan) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 6px;
+        }
+
+        .profile-subtitle {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .level-progress {
+            width: 100%;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--card-bg);
+            padding: 12px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-text {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+        }
+
+        .progress-text strong {
+            color: var(--neon-cyan);
+        }
+
+        /* Grid Layout */
+        .quest-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            width: 100%;
+        }
+
+        /* RWD Breakpoints */
+        @media (max-width: 900px) {
+            .quest-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 500px) {
+            .quest-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Card Base Style */
+        .quest-card {
+            position: relative;
+            height: 85px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            padding: 0 18px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+        }
+
+        /* Unlocked Buttons (Active) */
+        .quest-card.unlocked {
+            border-color: rgba(0, 243, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .quest-card.unlocked::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.1),
+                transparent
+            );
+            transition: left 0.6s ease;
+        }
+
+        .quest-card.unlocked:hover {
+            transform: translateY(-5px);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 10px 25px -5px rgba(0, 243, 255, 0.3),
+                        0 0 15px rgba(0, 243, 255, 0.2);
+            background: rgba(22, 35, 48, 0.85);
+        }
+
+        .quest-card.unlocked:hover::before {
+            left: 100%;
+        }
+
+        .quest-card.unlocked .badge-num {
+            background: rgba(0, 243, 255, 0.15);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+        }
+
+        .quest-card.unlocked .quest-title {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .quest-card.unlocked:hover .quest-title {
+            color: #ffffff;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.6);
+        }
+
+        .quest-card.unlocked .action-icon {
+            color: var(--neon-cyan);
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .quest-card.unlocked:hover .action-icon {
+            transform: translateX(4px);
+        }
+
+        /* Locked Buttons */
+        .quest-card.locked {
+            background: var(--locked-bg);
+            border-color: rgba(255, 255, 255, 0.04);
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+
+        .quest-card.locked .badge-num {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--locked-text);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .quest-card.locked .quest-title {
+            color: var(--locked-text);
+            font-weight: 400;
+        }
+
+        .quest-card.locked:hover {
+            opacity: 0.8;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Card Elements Inner Layout */
+        .badge-num {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 14px;
+            flex-shrink: 0;
+        }
+
+        .quest-info {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .quest-title {
+            font-size: 0.95rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            transition: color 0.3s ease;
+        }
+
+        .action-icon {
+            font-size: 1.1rem;
+            margin-left: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 50px;
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+    <div class="bg-grid"></div>
+
+    <div class="container">
+        <header class="profile-section">
+            <div class="avatar-wrapper">
+                <img src="https://placehold.co/150x150/161b22/00f3ff?text=Vibe+Coder" alt="大頭貼" class="avatar-img" onerror="this.src='https://placehold.co/150x150/111111/ffffff?text=User'">
+            </div>
+            <span class="badge-tag"><i class="fa-solid fa-code"></i> VIBE CODING</span>
+            <h1 class="profile-name">網頁程式開發作品集</h1>
+            <p class="profile-subtitle">個人歷程與任務闖關清單</p>
+        </header>
+
+        <div class="level-progress">
+            <span class="progress-text"><i class="fa-solid fa-gamepad" style="color: var(--neon-cyan); margin-right: 6px;"></i> 探索進度：<strong>2 / 16 解鎖</strong></span>
+            <span class="progress-text"><i class="fa-solid fa-bolt" style="color: var(--neon-purple); margin-right: 6px;"></i> 狀態：冒險中</span>
+        </div>
+
+        <main class="quest-grid">
+            <!-- 按鈕 1：已解鎖 -->
+            <a href="w1/index.html" class="quest-card unlocked">
+                <div class="badge-num">01</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 1 - 數位名片</span>
+                </div>
+                <div class="action-icon">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </a>
+
+            <!-- 按鈕 2：已解鎖 -->
+            <a href="w2/index.html" class="quest-card unlocked">
+                <div class="badge-num">02</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 2 - 今天吃甚麼?</span>
+                </div>
+                <div class="action-icon">
+                    <i class="fa-solid fa-arrow-right"></i>
+                </div>
+            </a>
+
+            <!-- 按鈕 3 到 16：未解鎖 -->
+            <div class="quest-card locked">
+                <div class="badge-num">03</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 3 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">04</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 4 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">05</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 5 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">06</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 6 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">07</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 7 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">08</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 8 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">09</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 9 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">10</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 10 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">11</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 11 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">12</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 12 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">13</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 13 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">14</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 14 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">15</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 15 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+
+            <div class="quest-card locked">
+                <div class="badge-num">16</div>
+                <div class="quest-info">
+                    <span class="quest-title">Week 16 - 尚未解鎖</span>
+                </div>
+                <div class="action-icon">🔒</div>
+            </div>
+        </main>
+
+        <footer>
+            <p>© Web Development Portfolio - Powered by Vibe Coding</p>
+        </footer>
+    </div>
+</body>
+</html>
